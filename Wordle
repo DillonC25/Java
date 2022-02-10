@@ -1,0 +1,96 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+  public static void setArray(ArrayList<String> words) throws FileNotFoundException {
+    Scanner s = new Scanner(new File("words.txt"));
+    while (s.hasNextLine()) {
+      words.add((s.next()).toUpperCase());
+    }
+  }
+
+  public static void printList(ArrayList<String> words) {
+    for (int i = 0; i < words.size(); i++) {
+      System.out.println(words.get(i));
+    }
+  }
+
+  public static void playGame(ArrayList<String> words) {
+    Scanner a = new Scanner(System.in);
+    System.out.println("To put in letters that you know are not in the word, type in OUT");
+    System.out.println("To put in letters that you know are in the word but do not know the location of, type in Y");
+    System.out.println("To put in letters that you know the location of, type in G");
+    System.out.println("To exit type in EXIT");
+    System.out.println("Type in ALL capitals!");
+    while (true) {
+
+      String type = a.nextLine();
+      String let = "";
+      int loc = 0;
+      if (type.equals("EXIT")) {
+        System.exit(0);
+      } else if (type.equals("OUT")) {
+        System.out.println("Type in the letter that is out");
+        let = a.nextLine();
+        words = grey(words, let);
+        System.out.println("Possible options are:");
+        printList(words);
+        System.out.println("Put in OUT, Y, G, or EXIT");
+      } else if (type.equals("Y")) {
+        System.out.println("Type in the letter that is yellow");
+        let = a.nextLine();
+        words = yellow(words, let);
+        System.out.println("Possible options are:");
+        printList(words);
+        System.out.println("Put in OUT, Y, G, or EXIT");
+      } else if (type.equals("G")) {
+        System.out.println("Type in the letter that is green");
+        let = a.nextLine();
+        System.out.println("Type in the location that is green");
+        loc = a.nextInt();
+        words = green(words, let, loc);
+        System.out.println("Possible options are:");
+        printList(words);
+        System.out.println("Put in OUT, Y, G, or EXIT");
+      }
+    }
+  }
+
+  public static ArrayList<String> yellow(ArrayList<String> words, String letter) {
+    for (int i = 0; i < words.size(); i++) {
+      if ((((words.get(i)).indexOf(letter) == -1))) {
+        words.remove(i);
+        i--;
+      }
+    }
+    return (words);
+  }
+
+  public static ArrayList<String> grey(ArrayList<String> words, String letter) {
+    for (int i = 0; i < words.size(); i++) {
+      if ((((words.get(i)).indexOf(letter) >= 0))) {
+        words.remove(i);
+        i--;
+      }
+    }
+    return (words);
+  }
+
+  public static ArrayList<String> green(ArrayList<String> words, String letter, int index) {
+    index = index - 1;
+    for (int i = 0; i < words.size(); i++) {
+      if ((((words.get(i)).indexOf(letter) != index))) {
+        words.remove(i);
+        i--;
+      }
+    }
+    return (words);
+  }
+
+  public static void main(String[] args) throws FileNotFoundException {
+    ArrayList<String> words = new ArrayList<String>();
+    setArray(words);
+    playGame(words);
+  }
+}
